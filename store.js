@@ -26,9 +26,7 @@ Store.prototype = {
     },
     findRecord: function(name) {
         for (var i = 0; i < this.stock.length; i++) {
-            if (this.stock[i].name === name) {
-                return this.stock[i];
-            } else if (this.stock[i].title === name) {
+            if (this.stock[i].title === name) {
                 return this.stock[i];
             }
         }
@@ -36,10 +34,17 @@ Store.prototype = {
     sellRecord: function(record) {
         var r = record;
         if (!(record instanceof Record)) {
-            r = findRecord(record);
+            r = this.findRecord(record);
         }
         this.balance += r.price;
         return this.stock.splice(this.stock.indexOf(r), 1)[0];
+    },
+    buyRecord: function(recordI, seller) {
+        var record = seller.findRecord(recordI);
+        if (this.balance >= record.price) {
+            this.addRecord(seller.sell(record));
+            this.balance -= record.price;
+        }
     },
     returnRecord: function(record) {
         this.balance -= record.price;
