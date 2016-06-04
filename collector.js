@@ -1,38 +1,34 @@
-var Record = require('./record');
+var Inventory = require('./inventory');
 
 var Collector = function(name, startingBalance) {
     this.name = name;
     this.balance = startingBalance;
-    this.inventory = [];
+    this.inventory = new Inventory();
 };
 
 Collector.prototype = {
     addRecord: function() {
-        for (var i = 0; i < arguments.length; i++) {
-            this.inventory.push(arguments[i]);
-        }
+        this.inventory.addItem(arguments);
     },
     findRecord: function(name) {
-        for (var i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i].title === name) {
-                return this.inventory[i];
-            }
-        }
+        return this.inventory.findItem('title', name);
     },
-    buy: function(record_title, store) {
-        var record = store.findRecord(record_title);
-        if (this.balance >= record.price) {
-            this.addRecord(store.sellRecord(record));
-            this.balance -= record.price;
-        }
+    buyRecord: function(record_title, store) {
+        this.inventory.buy(this, store, record_title);
+        // var record = store.findRecord(record_title);
+        // if (this.balance >= record.price) {
+        //     this.addRecord(store.sellRecord(record));
+        //     this.balance -= record.price;
+        // }
     },
-    sell: function(record) {
-        var r = record;
-        if (!(record instanceof Record)) {
-            r = this.findRecord(record);
-        }
-        this.balance += r.price;
-        return this.inventory.splice(this.inventory.indexOf(r), 1)[0];
+    sellRecord: function(record) {
+        return this.inventory.sell(this, record);
+        // var r = record;
+        // if (!(record instanceof Record)) {
+        //     r = this.findRecord(record);
+        // }
+        // this.balance += r.price;
+        // return this.inventory.splice(this.inventory.indexOf(r), 1)[0];
     }
 };
 

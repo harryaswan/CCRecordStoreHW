@@ -20,15 +20,15 @@ describe('Collector', function() {
     });
     it('Can buy a record from the store and balance reduces', function() {
         store.addRecord(record2, record3, record4);
-        collector.buy("Black Ice", store);
-        assert.equal(1, collector.inventory.length);
+        collector.buyRecord(33333333, store);
+        assert.equal(1, collector.inventory.length());
         assert.equal(15.95, collector.balance);
     });
 
     it('Can sell a record to the store and balance increases', function() {
         collector.addRecord(record2, record3, record4);
-        store.buyRecord("Black Ice", collector);
-        assert.equal(2, collector.inventory.length);
+        store.buyRecord(33333333, collector);
+        assert.equal(2, collector.inventory.length());
         assert.equal(24.05, collector.balance);
     });
 });
