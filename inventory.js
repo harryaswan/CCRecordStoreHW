@@ -8,7 +8,9 @@ Inventory.prototype = {
     addItem: function() {
         var args = arguments[0];
         for (var i = 0; i < args.length; i++) {
-            this.items.push(args[i]);
+            if (args[i]) {
+                this.items.push(args[i]);
+            }
         }
 
 
@@ -31,16 +33,21 @@ Inventory.prototype = {
         var r = seller.inventory.checkIfItem(item);
         if (r) {
             if (buyer.balance >= r.price) {
-                buyer.addRecord(seller.sellRecord(r));
-                buyer.balance -= r.price;
+                var ra = seller.sellRecord(r);
+                if (ra) {
+                    buyer.addRecord(ra);
+                    buyer.balance -= r.price;
+                }
             }
         }
     },
     sell: function(seller, item) {
         var r = seller.inventory.checkIfItem(item);
-        if (r) {
+        if (r instanceof Record) {
             seller.balance += r.price;
             return this.items.splice(this.items.indexOf(r), 1)[0];
+        } else {
+            return false;
         }
     },
     checkIfItem: function(item) {
