@@ -55,7 +55,7 @@ Inventory.prototype = {
     },
     list: function() {
         for (var i = 0; i < this.items.length; i++) {
-            console.log(this.items[i]);
+            console.log("#" + i, this.items[i]);
         }
     },
     value: function() {
